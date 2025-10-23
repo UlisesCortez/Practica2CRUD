@@ -7,9 +7,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar">
 
-        <activity android:name=".EditarMascotaActivity" />
-        <activity android:name=".CrearMascotaActivity" />
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".EditarMascotaActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".CrearMascotaActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
