@@ -13,7 +13,7 @@ import com.example.practica2crud.modelos.mascota;
 public class EditarMascotaActivity extends AppCompatActivity {
 
     private EditText etNombreEditarMascota, etEdadEditarMascota;
-    private Button btnGuardarCambiosDeMascota, btnCancelarEdicion;
+    private Button btnGuardarCambiosDeMascota, btnCancelarEdicion, btnEliminarMascota;
     private MascotasController mascotasController;
     private long idMascota;
 
@@ -26,6 +26,7 @@ public class EditarMascotaActivity extends AppCompatActivity {
         etEdadEditarMascota = findViewById(R.id.etEdadEditarMascota);
         btnGuardarCambiosDeMascota = findViewById(R.id.btnGuardarCambiosDeMascota);
         btnCancelarEdicion = findViewById(R.id.btnCancelarEdicion);
+        btnEliminarMascota = findViewById(R.id.btnEliminarMascota);
 
         mascotasController = new MascotasController(this);
 
@@ -37,20 +38,42 @@ public class EditarMascotaActivity extends AppCompatActivity {
             etEdadEditarMascota.setText(String.valueOf(edad));
         }
 
+        // Guardar cambios
         btnGuardarCambiosDeMascota.setOnClickListener(v -> {
             String nombre = etNombreEditarMascota.getText().toString().trim();
             String sEdad = etEdadEditarMascota.getText().toString().trim();
+
             if (TextUtils.isEmpty(nombre) || TextUtils.isEmpty(sEdad)) {
                 if (TextUtils.isEmpty(nombre)) etNombreEditarMascota.setError("Requerido");
                 if (TextUtils.isEmpty(sEdad)) etEdadEditarMascota.setError("Requerido");
                 return;
             }
+
             int edad = Integer.parseInt(sEdad);
             mascota m = new mascota(nombre, edad, idMascota);
             mascotasController.guardarCambios(m);
             finish();
         });
 
+        // Eliminar mascota
+        btnEliminarMascota.setOnClickListener(v -> {
+            new androidx.appcompat.app.AlertDialog.Builder(EditarMascotaActivity.this)
+                    .setTitle("Eliminar")
+                    .setMessage("¿Eliminar a \"" + etNombreEditarMascota.getText().toString().trim() + "\"?")
+                    .setPositiveButton("Sí", (d, w) -> {
+                        mascota m = new mascota(
+                                etNombreEditarMascota.getText().toString().trim(),
+                                Integer.parseInt(etEdadEditarMascota.getText().toString().trim()),
+                                idMascota
+                        );
+                        mascotasController.eliminarMascota(m);
+                        finish();
+                    })
+                    .setNegativeButton("No", null)
+                    .show();
+        });
+
+        // Cancelar edición
         btnCancelarEdicion.setOnClickListener(v -> finish());
     }
 }
